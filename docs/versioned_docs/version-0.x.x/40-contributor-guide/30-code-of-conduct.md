@@ -1,5 +1,5 @@
 ---
-sidebar_label: Code of Conduct
+sidebar_label: Code of conduct
 description: Contributor Code of Conduct for the open source Kargo project
 ---
 

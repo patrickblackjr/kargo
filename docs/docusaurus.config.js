@@ -31,7 +31,27 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           sidebarCollapsible: false,
-          routeBasePath: '/', // Serve the docs at the site's roo
+          routeBasePath: '/', // Serve the docs at the site's root
+          includeCurrentVersion: true,
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: '1.1.x',
+              path: '/',
+              banner: 'none',
+              badge: true,
+            },
+            "1.0.x": {
+              label: '1.0.x',
+              banner: 'none',
+              path: '1.0.x',
+            },
+            "0.x.x": {
+              label: '0.x.x',
+              banner: 'unmaintained',
+              path: '0.x.x',
+            },
+          }
         },
         blog: false,
         pages: false,

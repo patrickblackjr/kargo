@@ -13,7 +13,7 @@ technologies, like [Argo CD](https://argoproj.github.io/cd/), to streamline and
 automate the progressive rollout of changes across the many stages of an
 application's lifecycle.
 
-![Screenshot](../static/img/screenshot.png)
+![Screenshot](/img/screenshot.png)
 
 Kargo's goal is to provide an intuitive and flexible layer "above" existing GitOps tooling, wherein you can describe the relationships between various application instances deployed to different environments as well as procedures for progressing changes from one application instance's source of truth to the next.
 
@@ -25,6 +25,10 @@ Watch the *Multi-Stage Deployment Pipelines the GitOps Way* talk by Jesse Suen &
   <iframe style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%"}} src="https://www.youtube.com/embed/0B_JODxyK0w" title="Kargo - Multi-Stage Deployment Pipelines using GitOps - Jesse Suen / Kent Rancourt" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen/>
 </div>
 </center>
+:::
+
+:::caution
+Kargo is undergoing active development and everyone is invited to [join us](https://github.com/akuity/kargo) in the journey to a GA release (`v1.0.0`)! Please expect breaking changes between pre-GA releases (`v0.x.x`).
 :::
 
 :::info

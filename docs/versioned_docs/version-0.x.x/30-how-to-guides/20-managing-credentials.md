@@ -1,11 +1,11 @@
 ---
 description: Find out how to manage repository credentials for use by Kargo
-sidebar_label: Managing Credentials
+sidebar_label: Managing credentials
 ---
 
 # Managing Credentials
 
-To manage the progression of Freight from Stage to Stage, Kargo will often
+To manage the progression of freight from stage to stage, Kargo will often
 require read/write permissions on private GitOps repositories and read-only
 permissions on private container image and/or Helm chart repositories.
 
@@ -56,23 +56,15 @@ field), MUST contain the following keys:
 
 * `repoURL`: The full URL of the repository the credentials are for.
 
-* Either:
+* `username`: The username to use when authenticating to the repository.
 
-  * `username`: The username to use when authenticating to the repository.
-
-  * `password`: A password or personal access token.
+* `password`: A password or personal access token.
 
     :::info
     If the value of the `password` key is a personal access token, the value of
     the `username` field may be inconsequential. You should consult your
     repository's documentation for more information.
     :::
-
-  OR:
-
-  * `sshPrivateKey`: A PEM-encoded SSH private key. Applicable to Git
-    repositories only.
-    
 
 Optionally, the following keys may also be included:
 
@@ -107,50 +99,6 @@ Refer to
 for more details.
 
 :::note
-Operators must manually ensure Kargo controllers receive read-only access
-to `Secret`s in the designated namespaces. For example, if `kargo-global-creds`
-is designated as a global credentials namespace, the following `RoleBinding`
-should be created within that `Namespace`:
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-    name: kargo-controller-read-secrets
-    namespace: kargo-global-creds
-subjects:
-    - kind: ServiceAccount
-      name: kargo-controller
-      namespace: kargo
-roleRef:
-    kind: ClusterRole
-    name: kargo-controller-read-secrets
-    apiGroup: rbac.authorization.k8s.io
-```
-:::
-
-:::info
-By default, Kargo controllers lack cluster-wide permissions on `Secret`
-resources. Instead, the Kargo _management controller_ dynamically expands
-controller access to `Secret`s on a namespace-by-namespace basis as new
-`Project`s are created.
-
-_It is because this process does not account for "global" credential namespaces
-that these bindings must be created manually by an operator._
-:::
-
-:::warning
-Setting `controller.serviceAccount.clusterWideSecretReadingEnabled` setting to
-`true` during Kargo installation will grant Kargo controllers cluster-wide read
-permission on `Secret` resources.
-
-__This is highly discouraged, especially in sharded environments where this
-permission would have the undesirable effect of granting remote Kargo
-controllers read permissions on all `Secret`s throughout the Kargo control
-plane's cluster -- including `Secret`s having nothing to do with Kargo.__
-:::
-
-:::note
 Any matching credentials (exact match _or_ pattern match) found in a project's
 own `Namespace` take precedence over those found in any global credentials
 `Namespace`.
@@ -167,6 +115,12 @@ appropriately labeled `Secret`s are considered in lexical order by name.
 When Kargo is configured with multiple global credentials `Namespace`s, they are
 searched in lexical order by name. Only after no exact match _and_ no pattern
 match is found in one global credentials `Namespace` does Kargo search the next.
+:::
+
+:::caution
+It is important to understand the security implications of this feature. Any
+credentials stored in a global credentials `Namespace` will be available to
+_all_ Kargo projects.
 :::
 
 ## Managing Credentials with the CLI
@@ -335,7 +289,7 @@ in question, Kargo will also lose access.
         kargo.akuity.io/cred-type: git
     stringData:
       githubAppID: <app id>
-      githubAppPrivateKey: <PEM-encoded private key>
+      githubAppPrivateKey: <base64-encoded private key>
       githubAppInstallationID: <installation id>
       repoURL: <repo url>
       repoURLIsRegex: <true if repoURL is a pattern matching multiple repositories>
@@ -536,7 +490,7 @@ metadata:
     kargo.akuity.io/cred-type: image
 stringData:
   gcpServiceAccountKey: <base64-encoded service account key>
-  repoURL: <artifact registry url>
+  repoURL: <ecr url>
 ```
 
 :::note
