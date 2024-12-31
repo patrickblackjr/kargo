@@ -86,6 +86,10 @@ const config = {
             position: 'left',
           },
           {
+            type: 'docsVersionDropdown',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/akuity/kargo',
             label: 'GitHub',
             position: 'right',
